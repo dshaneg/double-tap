@@ -1,4 +1,5 @@
-.PHONY: build publish play playtest deploy run kill \
+.PHONY: build publish deploy \
+		play playtest run kill \
 		dbuild-build dbuild-deploy dbuild-test dbuild-release \
 		ensure-logs clean deep-clean set-executable
 
