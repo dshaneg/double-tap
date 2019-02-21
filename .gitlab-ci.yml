@@ -5,6 +5,7 @@ services:
 stages:
  - commit-stage
  - manual-test
+ - security
  - deploy
 
 commit-stage:
@@ -20,6 +21,13 @@ publishToDev:
  stage: manual-test
  script:
    - echo "I'm the test stage"
+
+security-stage:
+ only:
+   - master
+ stage: security
+ script:
+   - echo "Security stage. you're welcome Tim"
 
 publishToProd:
  only:
