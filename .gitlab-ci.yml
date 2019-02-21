@@ -14,7 +14,6 @@ commit-stage:
  stage: commit-stage
  script:
    - echo "running build..."
-   - return 1
 
 unit-test:
  only:
