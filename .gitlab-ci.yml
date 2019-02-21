@@ -1,0 +1,30 @@
+image: docker:stable
+services:
+ - docker:dind
+
+stages:
+ - commit-stage
+ - manual-test
+ - deploy
+
+commit-stage:
+ only:
+   - master
+ stage: commit-stage
+ script:
+   - echo "Hello I'm a build"
+
+publishToDev:
+ only:
+   - master
+ stage: manual-test
+ script:
+   - echo "I'm the test stage"
+
+publishToProd:
+ only:
+   - master
+ stage: deploy
+ script:
+   - echo "I'm deploying now"
+ when: manual
