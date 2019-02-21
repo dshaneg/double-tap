@@ -13,7 +13,14 @@ commit-stage:
    - master
  stage: commit-stage
  script:
-   - echo "Hello I'm a build"
+   - echo "running build..."
+
+unit-test:
+ only:
+   - master
+ stage: commit-stage
+ script:
+   - echo "running unit tests.."
 
 publishToDev:
  only:
