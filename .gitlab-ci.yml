@@ -64,12 +64,15 @@ rfc-create:
  stage: create-rfc
  script:
    - echo "Waiting for RFC to be created..."
+ allow_failure: false
  when: manual
 
 deploy-to-prod:
  only:
    - master
  stage: deploy-to-prod
+ dependencies: 
+   - rfc-create
  script:
    - echo "Deploy to prod..."
    - echo "Run smoke test..."
