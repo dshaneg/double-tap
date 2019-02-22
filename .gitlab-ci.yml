@@ -1,45 +1,115 @@
-image: docker:stable
-services:
- - docker:dind
+image: alpine
 
 stages:
- - commit-stage
- - manual-test
+ - build
+ - unit-test
+ - publish
+ - deploy-to-sandbox
+ - functional-tests-sandbox
+ - deploy-to-prerod
+ - functional-tests-preprod
+ - performance-tests
  - security
- - deploy
+ - create-rfc
+ - deploy-to-prod
+ - smoke-test
+ - close-rfc
 
-commit-stage:
+build:
  only:
    - master
- stage: commit-stage
+ stage: build
  script:
-   - echo "running build..."
+   - echo "Running build..."
 
 unit-test:
  only:
    - master
- stage: commit-stage
+ stage: unit-stage
  script:
-   - echo "running unit tests.."
+   - echo "Running unit tests.."
 
-publishToDev:
+publish:
  only:
    - master
- stage: manual-test
+ stage: publish
  script:
-   - echo "I'm the test stage"
+   - echo "Publishing to artifactory"
 
-security-stage:
+deploy-to-sandbox:
+ only:
+   - master
+ stage: deploy-to-sandbox
+ script:
+   - echo "Deploying to sandbox"
+
+functional-tests-sandbox:
+ only:
+   - master
+ stage: functional-tests-sandbox
+ script:
+   - echo "Running functional tests against sandbox"
+
+deploy-to-prerod:
+ only:
+   - master
+ stage: deploy-to-prerod
+ script:
+   - echo "Deploying to preprod"
+
+functional-tests-preprod:
+ only:
+   - master
+ stage: functional-tests-preprod
+ script:
+   - echo "Running functional tests against preprod"
+
+load-tests:
+ only:
+   - master
+ stage: performance-tests
+ script:
+   - echo "Running load tests"
+
+capacity-tests:
+ only:
+   - master
+ stage: performance-tests
+ script:
+   - echo "Running capacity tests"
+
+security:
  only:
    - master
  stage: security
  script:
-   - echo "Security stage. you're welcome Tim"
+   - echo "Running security scan"
 
-publishToProd:
+create-rfc:
  only:
    - master
- stage: deploy
+ stage: deploy-to-prod
  script:
-   - echo "I'm deploying now"
+   - echo "Waiting for RFC creation"
  when: manual
+
+deploy-to-prod:
+ only:
+   - master
+ stage: deploy-to-prod
+ script:
+   - echo "Deploying to production"
+
+smoke-test:
+ only:
+   - master
+ stage: smoke-test
+ script:
+   - echo "Running smoke test against prod"
+
+close-rfc:
+ only:
+   - master
+ stage: close-rfc
+ script:
+   - echo "Closing RFC"
