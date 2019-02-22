@@ -1,96 +1,69 @@
 image: alpine
 
 stages:
- - build
- - unit-test
- - publish
- - deploy-to-sandbox
- - functional-tests-sandbox
- - deploy-to-prerod
- - functional-tests-preprod
- - performance-tests
- - security
- - create-rfc
+ - commit
+ - aat-preprod
+ - uat-preprod
+ - nfr-tests
+ - create-rfc  
  - deploy-to-prod
- - smoke-test
  - close-rfc
 
-build:
+commit:
  only:
    - master
- stage: build
+ stage: commit
  script:
    - echo "Running build..."
-
-unit-test:
- only:
-   - master
- stage: unit-test
- script:
-   - echo "Running unit tests.."
-
-publish:
- only:
-   - master
- stage: publish
- script:
+   - echo "Running unit tests"
    - echo "Publishing to artifactory"
 
-deploy-to-sandbox:
+aat-preprod:
  only:
    - master
- stage: deploy-to-sandbox
+ stage: aat-preprod
  script:
-   - echo "Deploying to sandbox"
+   - echo "Deploying to preprod..."
+   - echo "Running AAT..."
 
-functional-tests-sandbox:
+uat-preprod:
  only:
    - master
- stage: functional-tests-sandbox
+ stage: uat-preprod
  script:
-   - echo "Running functional tests against sandbox"
+   - echo "Running UAT..."
+ when: manual
 
-deploy-to-prerod:
+performance-test:
  only:
    - master
- stage: deploy-to-prerod
+ stage: nfr-tests
  script:
-   - echo "Deploying to preprod"
+   - echo "Deploying to preprod..."
+   - echo "Running load tests..."
+ 
+capacity-test:
+ only:
+   - master
+ stage: nfr-tests
+ script:
+   - echo "Deploying to preprod..."
+   - echo "Running load tests..."
 
-functional-tests-preprod:
+security-scan:
  only:
    - master
- stage: functional-tests-preprod
+ stage: nfr-tests
  script:
-   - echo "Running functional tests against preprod"
+   - echo "Deploying to preprod..."
+   - echo "Running security scan..."
 
-load-tests:
+rfc-create:
  only:
    - master
- stage: performance-tests
+ stage: create-rfc
  script:
-   - echo "Running load tests"
-
-capacity-tests:
- only:
-   - master
- stage: performance-tests
- script:
-   - echo "Running capacity tests"
-
-security:
- only:
-   - master
- stage: security
- script:
-   - echo "Running security scan"
-
-create-rfc:
- only:
-   - master
- stage: deploy-to-prod
- script:
-   - echo "Waiting for RFC creation"
+   - echo "Waiting for RFC to be created..."
  when: manual
 
 deploy-to-prod:
@@ -98,18 +71,13 @@ deploy-to-prod:
    - master
  stage: deploy-to-prod
  script:
-   - echo "Deploying to production"
-
-smoke-test:
- only:
-   - master
- stage: smoke-test
- script:
-   - echo "Running smoke test against prod"
+   - echo "Deploy to prod..."
+   - echo "Run smoke test..."
+   - echo "Send slack notification"
 
 close-rfc:
  only:
    - master
  stage: close-rfc
  script:
-   - echo "Closing RFC"
+   - echo "Closing RFC..."
