@@ -60,4 +60,3 @@ __BE CAREFUL__ when running this step locally if you have kubernetes credentials
 make deploy
 ```
 
-oops
